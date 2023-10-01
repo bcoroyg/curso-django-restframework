@@ -105,7 +105,7 @@ docker compose up
 docker compose ps
 docker rm -f <ID>
 ```
-
+* Nota: Bajar contenedor Django.
 ```
 docker compose run --rm --service-ports django
 ```
@@ -125,6 +125,11 @@ docker network
 * prune
 * -a
 * -q
+
+### MIGRACIONES
+```
+docker compose run --rm django python manage.py makemigrations    
+```
 
 ## COOKIECUTTER
 * [Link](https://cookiecutter.readthedocs.io/en/stable/)
