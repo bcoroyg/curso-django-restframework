@@ -152,4 +152,5 @@ http localhost:8000/circles -b
 
 http localhost:8000/circles -v
 
+http localhost:8000/circles/create/ name=Cafe slug_name=cafe -v 
 ```
