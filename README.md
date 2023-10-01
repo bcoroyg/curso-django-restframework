@@ -154,3 +154,6 @@ http localhost:8000/circles -v
 
 http localhost:8000/circles/create/ name=Cafe slug_name=cafe -v 
 ```
+
+## SERIALIZERS
+* Son contenedores que permiten tomar tipos de datos complejos convertirlos por ejemplo a datos nativos de python y después poderlos usar como JSON o XML. Es como un contenedor que amolda datos que permite que solo datos que cumplen con las condiciones sean transformados a un tipo y después los puede transformar nuevamente a otro.
