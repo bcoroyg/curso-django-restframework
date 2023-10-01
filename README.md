@@ -133,3 +133,23 @@ docker compose run --rm django python manage.py makemigrations
 
 ## COOKIECUTTER
 * [Link](https://cookiecutter.readthedocs.io/en/stable/)
+
+## SHELL PLUS DJANGO
+```
+docker compose -f local.yml run --rm django python manage.py shell_plus
+```
+
+## INSTALACION DE HTTPIE
+```
+pip install httpie 
+```
+
+### USO DE HTTPIE
+```
+http localhost:8000/circles
+
+http localhost:8000/circles -b
+
+http localhost:8000/circles -v
+
+```
