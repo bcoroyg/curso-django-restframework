@@ -20,6 +20,7 @@ from cride.rides.serializers import (
     RideModelSerializer,
     JoinRideSerializer,
     EndRideSerializer,
+    CreateRideRatingSerializer,
 )
 
 # Models
@@ -66,7 +67,7 @@ class RideViewSet(mixins.ListModelMixin,
         permissions = [IsAuthenticated, IsActiveCircleMember]
         if self.action in ['update', 'partial_update', 'finish']:
             permissions.append(IsRideOwner)
-        if action == 'join':
+        if self.action == 'join':
             permissions.append(IsNotRideOwner)
         return [p() for p in permissions]
 
@@ -84,13 +85,15 @@ class RideViewSet(mixins.ListModelMixin,
             return CreateRideSerializer
         if self.action == 'update':
             return JoinRideSerializer
-        if self.action == 'finish':
+        if self.action == 'join':
             return EndRideSerializer
+        if self.action == 'rate':
+            return CreateRideRatingSerializer
         return RideModelSerializer
 
     def get_queryset(self):
         """Return active circle's rides."""
-        if self.action != 'finish':
+        if self.action not in ['finish', 'retrieve']:
             offset = timezone.now() + timedelta(minutes=10)
             return self.circle.ride_set.filter(
                 departure_date__gte=offset,
@@ -130,3 +133,16 @@ class RideViewSet(mixins.ListModelMixin,
         ride = serializer.save()
         data = RideModelSerializer(ride).data
         return Response(data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['post'])
+    def rate(self, request, *args, **kwargs):
+        """Rate ride."""
+        ride = self.get_object()
+        serializer_class = self.get_serializer_class()
+        context = self.get_serializer_context()
+        context['ride'] = ride
+        serializer = serializer_class(data=request.data, context=context)
+        serializer.is_valid(raise_exception=True)
+        ride = serializer.save()
+        data = RideModelSerializer(ride).data
+        return Response(data, status=status.HTTP_201_CREATED)
